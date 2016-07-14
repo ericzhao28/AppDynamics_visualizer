@@ -19,12 +19,12 @@ exports.viewChart = (req, res) => {
 
 
 // Spoof controller data for a prettier demo
-exports.apiCall = (req, res) => {
+exports.rapiCall = (req, res) => {
 	res.send('{"title":"' + req.body.title + '","startTime":"' + req.body.startTimeInput + '","endTime":"' + req.body.endTimeInput + '","chartData":[{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"time":1468305600000,"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '}],"maxValue":232}');
 }
 
 // Call for chart data by ajax
-exports.rapiCall = (req, res) => {
+exports.apiCall = (req, res) => {
 	// Initate respnse object
 	var responseObject = {};
 	responseObject.title = req.body.title;

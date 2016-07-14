@@ -38,7 +38,6 @@ script.
   var newDataset = {
   label: updatedChartData.title + ": " + updatedChartData.startTime + " to " + updatedChartData.endTime,
   borderColor: primaryColor,
-  backgroundColor: primaryColor,
   pointBorderColor: primaryColor,
   pointBackgroundColor: primaryColor,
   pointBorderWidth: 1,
@@ -80,7 +79,6 @@ script.
   var newDataset = {
   label: updatedChartData.title + ": " + updatedChartData.startTime + " to " + updatedChartData.endTime,
   borderColor: primaryColor,
-  backgroundColor: primaryColor,
   pointBorderColor: primaryColor,
   pointBackgroundColor: primaryColor,
   pointBorderWidth: 1,
@@ -137,7 +135,7 @@ script.
   nonCircConfig = { type: 'line', data: { labels: config.data.labels, datasets: [] }, options: config.options};
 
   config.data.datasets.forEach(function(value, index){
-  nonCircConfig.data.datasets.push({label:value.label, backgroundColor:value.borderColor, borderColor:value.borderColor, data:value.data, pointBackgroundColor:value.borderColor, pointBorderColor:value.borderColor, pointBorderWidth:value.pointBorderWidth});
+  nonCircConfig.data.datasets.push({label:value.label, borderColor:value.borderColor, data:value.data, pointBackgroundColor:value.borderColor, pointBorderColor:value.borderColor, pointBorderWidth:value.pointBorderWidth});
   });
   $.ajax({
   type: "POST",
@@ -159,6 +157,3 @@ script.
   }
   });
   }
-  $('input').click(function() {
-  $(this).select(); 
-  });
