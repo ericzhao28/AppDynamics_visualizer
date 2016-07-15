@@ -1,6 +1,9 @@
 #AppDynamics Chart Visualizer
 A third-party tool that allows juxtaposing AppDynamics Controller Metrics across different servers, applications, other entities, different time periods and varying time intervals. Allows users to compare/analyze any combination of any amount of metrics, and then save and share the graph via a unique URL. 
 
+#Why?
+The current metric browser only allows comparing different metrics across a set time period and with a baseline.
+
 #Fetching data from the controller
 As long as a controller can be publicly accessed, it should work with this tool. Controller information / account credentials are provided in the form for adding net metrics to the graph visualizer.
 
