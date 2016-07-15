@@ -1,7 +1,7 @@
 #AppDynamics Chart Visualizer
 A third-party tool that allows juxtaposing AppDynamics Controller Metrics across different servers, applications, other entities, different time periods and varying time intervals. Allows users to compare/analyze any combination of any amount of metrics, and then save and share the graph via a unique URL. 
 
-[[Maintenance Intended](http://maintained.tech/badge.svg)](http://maintained.tech/)
+[![Maintenance Intended](http://maintained.tech/badge.svg)](http://maintained.tech/)
 
 #Why?
 The current metric browser only allows comparing different metrics across a set time period and with a baseline.
