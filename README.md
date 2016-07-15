@@ -1,15 +1,15 @@
-##AppDynamics Chart Visualizer
+#AppDynamics Chart Visualizer
 A third-party tool that allows juxtaposing AppDynamics Controller Metrics across different servers, applications, other entities, different time periods and varying time intervals. Allows users to compare/analyze any combination of any amount of metrics, and then save and share the graph via a unique URL. 
 
 [![Maintenance Intended](http://maintained.tech/badge.svg)](http://maintained.tech/)
 
-#Why?
+##Why?
 The current metric browser only allows comparing different metrics across a set time period and with a baseline.
 
-#Fetching data from the controller
+##Fetching data from the controller
 As long as a controller can be publicly accessed, it should work with this tool. Controller information / account credentials are provided in the form for adding net metrics to the graph visualizer.
 
-#Getting the data for visualization
+##Getting the data for visualization
 In order to fetch data from the controller for visualization the following information is necessary:
 * Controller username
 * Controller account name
@@ -26,10 +26,10 @@ AND EITHER:
 	* Metric ID (Usually three/four digit number)
 	* Entity Type (Usually all caps string)
 
-#Why sign in?
+##Why sign in?
 User accounts are important for future features. Feel free to remove them (but make sure to modify the Mongoose model of the saved graph).
 
-#Installation
+##Installation
 '''
 cd {DIRECTORY}
 npm install
