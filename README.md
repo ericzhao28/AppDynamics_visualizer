@@ -30,12 +30,12 @@ AND EITHER:
 User accounts are important for future features. Feel free to remove them (but make sure to modify the Mongoose model of the saved graph).
 
 ##Installation
-'''
+```
 cd {DIRECTORY}
 npm install
 npm install --save node-sass@3.3.3
-'''
-!! You may need to change the node-sass vendor version from Linux->OSX or vise versa.
+```
+###You may need to change the node-sass vendor version from Linux->OSX or vise versa.
 
 #Copyright
 Includes basic user authentication and Facebook OAuth. Licenses of used open source projects can be found at the top of files + LICENSE file.
