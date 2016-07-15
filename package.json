@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com:ericzhao28/appDynamicsVisualizer.git"
+    "url": "git@github.com:ericzhao28/AppDynamics_visualizer.git"
   },
   "scripts": {
     "start": "node app.js",

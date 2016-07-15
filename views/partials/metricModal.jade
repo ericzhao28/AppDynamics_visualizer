@@ -9,34 +9,34 @@
 				form#chartUpdateForm(role='form')
 					.form-group
 						label(for='title') Title
-						input#title.form-control(type='text', name='title', value='Test metric', placeholder='Give your metric a name')
+						input#title.form-control(type='text', name='title', value='', placeholder='Give your metric a name')
 					.form-group
 						label(for='username') Username
-						input#username.form-control(type='text', name='username', value='ez', placeholder='Your username')
+						input#username.form-control(type='text', name='username', value='', placeholder='Your username')
 					.form-group
 						label(for='accountName') Account Name
-						input#accountName.form-control(type='text', name='accountName', value='customer1', placeholder='Default is Customer1')
+						input#accountName.form-control(type='text', name='accountName', value='', placeholder='Default is Customer1')
 					.form-group
 						label(for='password') Password
-						input#password.form-control(type='text', name='password', value='558208121121', placeholder="Account password")
+						input#password.form-control(type='text', name='password', value='', placeholder="Account password")
 					.form-group
 						label(for='hostInfo') Host Address
-						input#hostInfo.form-control(type='text', name='hostInfo', value='192.168.1.126:8090', placeholder="Ip address/domain + port (don't include http)")
+						input#hostInfo.form-control(type='text', name='hostInfo', value='', placeholder="Ip address/domain + port (don't include http)")
 					.form-group
 						label(for='startTimeInput') UTC Start time
-						input#startTimeInput.form-control(type='text', name='startTimeInput', value='July 14, 2016 02:07:00', placeholder='Format: October 13, 2014 11:13:00')
+						input#startTimeInput.form-control(type='text', name='startTimeInput', value='', placeholder='Format: October 13, 2014 11:13:00')
 					.form-group
 						label(for='endTimeInput') UTC End time
-						input#endTimeInput.form-control(type='text', name='endTimeInput', value='July 14, 2016 20:30:00', placeholder='Format: October 13, 2014 11:13:00')
+						input#endTimeInput.form-control(type='text', name='endTimeInput', value='', placeholder='Format: October 13, 2014 11:13:00')
 					.form-group
 						label(for='metricId') Metric ID
-						input#hostInfo.form-control(type='text', name='metricId', value='855', placeholder="")
+						input#hostInfo.form-control(type='text', name='metricId', value='', placeholder="")
 					.form-group
 						label(for='entityId') Entity ID
-						input#hostInfo.form-control(type='text', name='entityId', value='5', placeholder="")
+						input#hostInfo.form-control(type='text', name='entityId', value='', placeholder="")
 					.form-group
 						label(for='entityType') Entity Type
-						input#hostInfo.form-control(type='text', name='entityType', value='APPLICATION_COMPONENT', placeholder="")
+						input#hostInfo.form-control(type='text', name='entityType', value='', placeholder="")
 					button#visualizeButton.btn.btn-default Visualize
 			.modal-footer
 				button.btn.btn-default(type='button', data-dismiss='modal')
@@ -53,25 +53,25 @@
 				form#shortChartUpdateForm(role='form')
 					.form-group
 						label(for='shorttitle') Title
-						input#shorttitle.form-control(type='text', name='title', value='Metric', placeholder='Give your metric a name')
+						input#shorttitle.form-control(type='text', name='title', value='', placeholder='Give your metric a name')
 					.form-group
 						label(for='shortusername') Username
-						input#shortusername.form-control(type='text', name='username', value='user1', placeholder='Your username')
+						input#shortusername.form-control(type='text', name='username', value='', placeholder='Your username')
 					.form-group
 						label(for='shortaccountName') Account Name
-						input#shortaccountName.form-control(type='text', name='accountName', value='customer1', placeholder='Default is Customer1')
+						input#shortaccountName.form-control(type='text', name='accountName', value='', placeholder='Default is Customer1')
 					.form-group
 						label(for='shortpassword') Password
-						input#shortpassword.form-control(type='text', name='password', value='welcome', placeholder="Account password")
+						input#shortpassword.form-control(type='text', name='password', value='', placeholder="Account password")
 					.form-group
 						label(for='shortstartTimeInput') UTC Start time
-						input#shortstartTimeInput.form-control(type='text', name='startTimeInput', value='July 14, 2016 20:07:00', placeholder='Format: October 13, 2014 11:13:00')
+						input#shortstartTimeInput.form-control(type='text', name='startTimeInput', value='', placeholder='Format: October 13, 2014 11:13:00')
 					.form-group
 						label(for='shortendTimeInput') UTC End time
-						input#shortendTimeInput.form-control(type='text', name='endTimeInput', value='July 14, 2016 20:30:00', placeholder='Format: October 13, 2014 11:13:00')
+						input#shortendTimeInput.form-control(type='text', name='endTimeInput', value='', placeholder='Format: October 13, 2014 11:13:00')
 					.form-group
 						label(for='apiPreRegString') API Call String
-						input#apiPreRegString.form-control(type='text', name='apiPreRegString', value='http://54.200.135.118:8090/controller/#/location=METRIC_BROWSER&timeRange=last_30_minutes.BEFORE_NOW.-1.-1.30&application=5&metrics=APPLICATION_COMPONENT.8.855', placeholder="See instructions")
+						input#apiPreRegString.form-control(type='text', name='apiPreRegString', value='', placeholder="See instructions")
 					button#shortVisualizeButton.btn.btn-default Visualize
 			.modal-footer
 				button.btn.btn-default(type='button', data-dismiss='modal')

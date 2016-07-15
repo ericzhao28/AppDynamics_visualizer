@@ -1,31 +1,42 @@
+// Get requirements
 var request = require("request");
 var async = require('async');
 
 /**
- * GET /
+ * GET /visualizer
  * Visualizer index
  */
 
-// Visualize
+// Visualize the initial visualizer page with default config
 exports.viewChart = (req, res) => {
 	if (!req.user) {
     return res.redirect('/');
   }
   res.render('visualizer', {
     title: 'Visualizer',
+    // Provide initial config
     config: "{ type: \'line\', data: { labels: [\"10%\", \"20%\", \"30%\", \"40%\", \"50%\", \"60%\", \"70%\", \"80%\", \"90%\", \"100%\"], datasets: [] }, options: { fontColor:\"#fff\", responsive: true, title:{ display:true, text:\'AppDynamics Visualizer\' }, tooltips: { mode: \'label\', callbacks: { } }, hover: { mode: \'dataset\' }, scales: { xAxes: [{ display: true, scaleLabel: { display: true, labelString: \'Percentage of time elapsed of time interval\' } }], yAxes: [{ display: true, scaleLabel: { display: true, labelString: \'Traffic\' }, ticks: { suggestedMin: 0, suggestedMax: 100, }}]}}}"
   });
 };
 
+/**
+ * GET /api/visualizer/fetchMetricData
+ * Metric data api request (fake data)
+ */
 
 // Spoof controller data for a prettier demo
-exports.rapiCall = (req, res) => {
+exports.fakeApiCall = (req, res) => {
 	res.send('{"title":"' + req.body.title + '","startTime":"' + req.body.startTimeInput + '","endTime":"' + req.body.endTimeInput + '","chartData":[{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"time":1468305600000,"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '},{"value":' + Math.random()*100 + '}],"maxValue":232}');
 }
 
-// Call for chart data by ajax
+/**
+ * GET /api/visualizer/fetchMetricData
+ * Metric data api request (real data)
+ */
+
+// Call for metric data to add to the chart
 exports.apiCall = (req, res) => {
-	// Initate respnse object
+	// Initiate respnse object
 	var responseObject = {};
 	responseObject.title = req.body.title;
 	responseObject.startTime = req.body.startTimeInput;
@@ -37,6 +48,7 @@ exports.apiCall = (req, res) => {
 	var metricId;
 	var entityId;
 	var entityType;
+
 	// Regex apiPreRegString if provided
 	if (req.body.apiPreRegString){
 		hostInfo = req.body.apiPreRegString.replace(/http:\/\/(.*?:.*?)\/.*/, "$1"); 
@@ -50,13 +62,13 @@ exports.apiCall = (req, res) => {
 		entityType = req.body.entityType;
 	}
 
-	console.log(hostInfo + "||" + metricId + "//" + entityId + "::" + entityType);
 	// Get credential data
+	console.log(hostInfo + "||" + metricId + "//" + entityId + "::" + entityType);
 	var username = req.body.username;
 	var accountName = req.body.accountName;
 	var password = req.body.password;
 
-	// Arbitrary
+	// Arbitrary increment call (10 time periods worth of metrics returned to requester)
 	var incrementCall = 10;
 	
 	// Generate time objects
@@ -64,24 +76,21 @@ exports.apiCall = (req, res) => {
 	var endTime = new Date(req.body.endTimeInput);
 	// Total time interval in minutes:
 	var totalTimeInterval =  ((endTime.getTime() - startTime.getTime())/1000)/60;
-	// Divide into 5%s for arbitrary x-axis
+	// Partial time interval for collecting metrics (Split into 11 time periods, for 10 measurements)
 	var varTimeInterval = totalTimeInterval / (incrementCall+1);
 
-	// Cuz I got tired of indenting everything :'(
+	// Communicating with metric controller
 	async.waterfall([
-	// Waterfall generates necessary options (primarily headers + body)
-	// For actual metric request
+	// Begin fulfilling authentication process
     function(callback) {
-    	// Authentication key generate from 64 encoding + parsing credentials
+    	// Generate authentication key from 64 encoding + parsing credentials
 			generateAuthKey(username, accountName, password, function(authenticationKey){
-        
 				callback(null, authenticationKey);
 			});
     },
     function(authenticationKey, callback) {
     	// Pass on authentication key to authenticating user
     	authenticateUser(authenticationKey, hostInfo, function(error, cookieString){
-
      		if (error){
      			responseObject.error = error.toString();
 					res.send(JSON.stringify(responseObject));
@@ -94,53 +103,39 @@ exports.apiCall = (req, res) => {
     function(cookieString, authInfo, callback) {
     	// Do the actual metric browser data request
 			authenticatedRequestOptionGen('http://' + hostInfo +'/controller/restui/metricBrowser/getMetricData', hostInfo, cookieString, authInfo, function(generatedOptions){
-        
 				callback(null, generatedOptions);
 			});
     }
+  // Now authentication should be complete
 	], function (err, resultingOptions) {
-		// Process metric browser query response
-		// and return as JSON response to API call
-
-
-		// Run metric data fetching for every 20%
+	// Time to begin collecting metrics
+		// Run metric data fetching for every time period 
 		async.timesSeries(incrementCall, function(i, next) {
-			// i is index value
+			// Define limits of time periods for metric requests
 			var n = i+1;
 			var shortEndTime = startTime.getTime() + (varTimeInterval * n * 60 * 1000);
 			var shortStartTime = startTime.getTime() + (varTimeInterval * i * 60 * 1000);
-
+			// Initiate metric requests
 			metricBrowserDataRequest(resultingOptions, shortStartTime, shortEndTime, Math.round(varTimeInterval), metricId, entityId, entityType, function(error, requestResult){
-				/*
-				if (error){
-					responseObject.error = error.toString();
-					res.send(JSON.stringify(responseObject));
-					return;
-				}
-				*/
 				// Add to chart data array
         responseObject.chartData.push(requestResult);
         next();
 			});
-
-
+		// After completing all metric chart data requests
 		}, function(error){
-
-			// After completing all metric chart data requests
-		  // Add max value to returned object to gauge maximum value of chart
+		  // Add maximum value in metric data to the returned responseObject
 			responseObject.maxValue = Math.max.apply(Math, responseObject.chartData);
-			console.log("Resp: " + JSON.stringify(responseObject));
+			// Log the response
+			console.log("Our API Metric Request Response: " + JSON.stringify(responseObject));
+			// Send out the response
 			res.send(JSON.stringify(responseObject));      
-
 		});
-
 	});
-
-// End of exports
+// End of metric data requests api call exports
 };
 
 
-// Update dates string
+// Add zero to partial date strings if necessary
 function addZero(i) {
     if (i < 10) {
         i = "0" + i;
@@ -150,13 +145,13 @@ function addZero(i) {
 
 // Generate authentication key for login by base64 encoding a 
 // combo of username+accountname+password; transition ex: 
-// ez%40customer1:558208121121 -> Basic ZXolNDBjdXN0b21lcjE6NTU4MjA4MTIxMTIx
+// ez%40customer1:passw0rd -> Basic ZXolNDBjdXN0b21lcjE6NTU4MjA4MTIxMTIx
 function generateAuthKey(username, accountname, password, cb){
 	var authenticationKey = new Buffer(username + "%40" + accountname + ":" + password).toString('base64');
 	cb(authenticationKey);
 }
 
-// Generate authenticated request options
+// Generate options for requests that are already authenticated
 function authenticatedRequestOptionGen(url, hostInfo, cookieString, authInfo, cb){
 	var options = {
 		method: 'POST',
@@ -199,27 +194,26 @@ function authenticateUser(authenticationKey, host, cb){
 	  { 
 	    'cache-control': 'no-cache',
 	    authorization: 'Basic ' + authenticationKey, 
-	    cookie: 'JSESSIONID=lmaolmao;', // Random, hopefully this works?
+	    cookie: 'JSESSIONID=lmaolmao;', // Random, not like they check it lmao
 	    'accept-language': 'en-US,en;q=0.8',
 	    'accept-encoding': 'gzip, deflate, sdch',
 	    referer: 'http://' + host + '/controller/',
-	    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', // Supposedly bad but meh idgaf
+	    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36', 
 	    accept: 'application/json, text/plain, */*',
 	    connection: 'keep-alive',
 	    host: host
 	  } 
 	};
-
-	// Send out request
+	// Send authentication request
 	request(options, function (error, response, body) {
-		// Ples no
+		// Receieve response
 		if (error){
 			cb(error, null);
 			return;
 		}
-
 		try{
-		  // Get the cookies
+			// We are assuming cookies were successfuly returned
+		  // Grab the returned cookies
 		 	var setCookieList = [];
 		  response.headers["set-cookie"].forEach(
 		    function ( cookiestr ) {
@@ -242,12 +236,13 @@ function authenticateUser(authenticationKey, host, cb){
 			return;
 		}
 	});
+// End of authenticate user request function
 }
 
 
 
-// Send request for metric browser chart data, across a set time interval
-// returns a single data value for a short time interval that is used for plotting
+// Send request for metric browser chart data, across a set time interval,
+// returning a single data value for a short time interval that is used for plotting
 function metricBrowserDataRequest(options, startTime, endTime, timeInterval, metricId, entityId, entityType, callback){
 
 	// Build start and end time strings
@@ -269,17 +264,17 @@ function metricBrowserDataRequest(options, startTime, endTime, timeInterval, met
 		addZero(endTimeObj.getMinutes()) + ":" +
 		addZero(endTimeObj.getSeconds()) + ".000Z";
 
-	// Build JSON body for metric request
+	// Build JSON payload for the metric requests
 	options.body = '{"metricDataQueries":[{"metricId":' + metricId + ',"entityId":' + entityId + ',"entityType":"' + entityType + '"}],"timeRangeSpecifier":{"type":"BETWEEN_TIMES","startTime":"' + startTimeString + '","endTime":"' + endTimeString + '","durationInMinutes":' + Math.ceil(timeInterval) + '},"metricBaseline":null,"maxSize":1000}';
 
-	// Get length of metric request 
-	options.headers["content-length"] = options.body.length; // Get string length function
+	// Get the length of metric request 
+	options.headers["content-length"] = options.body.length;
 
-	// Send it out!
-
-	console.log(JSON.stringify(options));
+	// Log the options that are used for the controller communication
+	console.log("Controller communication option: " JSON.stringify(options));
 
 	request(options, function (error, response, body) {
+		// Response from metric browser retrieved
 		if (error){
 			callback(error, null);
 			return;
@@ -287,12 +282,16 @@ function metricBrowserDataRequest(options, startTime, endTime, timeInterval, met
 		var parsedResp = JSON.parse(body);
 		// We only want to grab a single slice of data
 		// because we already narrowed down the time interval 
+		// so only the first item in the array is accepted
 		try {
 			var timeStamp = parsedResp[0].dataTimeslices[0].startTime;
 			var value = parsedResp[0].dataTimeslices[0].metricValue.value;
 		  callback(null, {"time": timeStamp, "value": value});
 		}
+		// Check if response was parsable
 		catch (err){
+			// Return a blank value, so that the chart can leave a blank
+			// hole in the chart if no metric data responded
 			console.log("Finding error");
 			callback(error, {"value": null});
 			return;

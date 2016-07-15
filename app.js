@@ -31,8 +31,8 @@ const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
-const chartController = require('./controllers/charty');
-const graphController = require('./controllers/graph');
+const chartController = require('./controllers/chartHandler');
+const chartSaving = require('./controllers/chartSavingHandler');
 
 
 /**
@@ -169,8 +169,8 @@ app.post('/api/visualizer/fetchMetricData', chartController.apiCall);
 /*
  * Charts saved
 */
-app.get("/visualizer/:graphID", graphController.viewGraph);
-app.post("/api/visualizer/save", graphController.saveGraph);
+app.get("/visualizer/:graphID", chartSaving.viewGraph);
+app.post("/api/visualizer/save", chartSaving.saveGraph);
 
 
 
