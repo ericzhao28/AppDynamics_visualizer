@@ -38,4 +38,4 @@ npm install --save node-sass@3.3.3
 ###You may need to change the node-sass vendor version from Linux->OSX or vise versa.
 
 #Copyright
-Includes basic user authentication and Facebook OAuth. Licenses of used open source projects can be found at the top of files + LICENSE file.
+Includes basic user authentication and Facebook OAuth. Licenses of used open source projects can be found at the top of files and the LICENSE file.
