@@ -271,7 +271,7 @@ function metricBrowserDataRequest(options, startTime, endTime, timeInterval, met
 	options.headers["content-length"] = options.body.length;
 
 	// Log the options that are used for the controller communication
-	console.log("Controller communication option: " JSON.stringify(options));
+	console.log("Controller communication option: " + JSON.stringify(options));
 
 	request(options, function (error, response, body) {
 		// Response from metric browser retrieved
