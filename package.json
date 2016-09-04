@@ -1,9 +1,9 @@
 {
-  "name": "AppDynamicsVisualizer",
+  "name": "appdynamicsvisualizer",
   "version": "1.0.1",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ericzhao28/AppDynamics_visualizer.git"
+    "url": "git+ssh://git@github.com/ericzhao28/AppDynamics_visualizer.git"
   },
   "scripts": {
     "start": "node app.js",
@@ -68,5 +68,16 @@
   "engines": {
     "node": "6.1.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "description": "A third-party tool that allows juxtaposing AppDynamics Controller Metrics across different servers, applications, other entities, different time periods and varying time intervals. Allows users to compare/analyze any combination of any amount of metrics, and then save and share the graph via a unique URL.",
+  "bugs": {
+    "url": "https://github.com/ericzhao28/AppDynamics_visualizer/issues"
+  },
+  "homepage": "https://github.com/ericzhao28/AppDynamics_visualizer#readme",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "author": "Eric Zhao",
+  "keywords": []
 }
